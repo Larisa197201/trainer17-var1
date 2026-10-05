@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Задание 16 — вариант 1 | Тренажёр от Макса</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #17212b;
+      --muted: #667085;
+      --accent: #3b82f6;
+      --accent2: #2563eb;
+      --ok: #16a34a;
+      --bad: #dc2626;
+      --warn: #d97706;
+      --border: #e4e7ec;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #dbeafe, transparent 35%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+      color: #fff;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(29, 78, 216, 0.25);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(22px, 4vw, 32px);
+    }
+
+    .subtitle {
+      margin: 0;
+      opacity: 0.94;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 20px 0;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 11px 18px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--accent);
+      color: #fff;
+      transition: 0.2s;
+      box-shadow: 0 8px 18px rgba(59, 130, 246, 0.25);
+    }
+
+    .btn:hover {
+      background: var(--accent2);
+      transform: translateY(-1px);
+    }
+
+    .btn.ghost {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid #d0d5dd;
+      box-shadow: none;
+    }
+
+    .btn.ghost:hover { background: #f9fafb; }
+
+    .total {
+      margin-left: auto;
+      font-weight: 700;
+      color: #344054;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 22px;
+      margin: 18px 0;
+      box-shadow: 0 10px 30px rgba(16, 24, 40, 0.08);
+      border: 1px solid #eef2f6;
+    }
+
+    .task-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .status {
+      font-size: 13px;
+      font-weight: 800;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: #f2f4f7;
+      color: #667085;
+    }
+
+    .status.ok { background: #dcfce7; color: #166534; }
+    .status.bad { background: #fee2e2; color: #991b1b; }
+
+    .sentence {
+      padding: 14px 16px;
+      background: #f8fafc;
+      border-radius: 14px;
+      margin: 12px 0;
+      font-size: 16px;
+      border: 1px solid #eef2f6;
+    }
+
+    .sentence .m {
+      display: inline-block;
+      font-weight: 800;
+      color: #2563eb;
+      padding: 0 2px;
+    }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .input-row label {
+      font-weight: 600;
+      color: #475467;
+    }
+
+    .answer-input {
+      flex: 1;
+      min-width: 180px;
+      padding: 11px 14px;
+      font-size: 17px;
+      font-weight: 700;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      outline: none;
+      font-family: inherit;
+      letter-spacing: 2px;
+      background: #fff;
+      color: #111827;
+      transition: 0.15s;
+    }
+
+    .answer-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+    }
+
+    .answer-input.correct {
+      border-color: #86efac;
+      background: #f0fdf4;
+      color: #166534;
+    }
+
+    .answer-input.wrong {
+      border-color: #fca5a5;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .feedback {
+      margin-top: 12px;
+      font-weight: 600;
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .explain {
+      margin-top: 8px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      border-left: 4px solid #94a3b8;
+      border-radius: 10px;
+      color: #475467;
+      font-weight: 500;
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14.5px;
+    }
+
+    @media (max-width: 600px) {
+      .card { padding: 16px; }
+      .toolbar .total {
+        width: 100%;
+        margin-left: 0;
+        text-align: center;
+      }
+      .actions { flex-direction: column; }
+      .btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Задание 16 • Вариант 1</h1>
+      <p class="subtitle">
+        Расставьте все знаки препинания: укажите цифру(-ы), на месте которой(-ых) должна(-ы) стоять запятая(-ые).
+        Впишите номера <b>без пробелов и запятых</b> в порядке возрастания, например: <b>1234</b>.
+      </p>
+    </header>
+
+    <div class="toolbar">
+      <button class="btn" id="checkAll">Проверить всё</button>
+      <button class="btn ghost" id="resetAll">Сбросить всё</button>
+      <div class="total" id="total">Выполнено: 0 из 10 • Верно: 0</div>
+    </div>
+
+    <main id="tasks"></main>
+  </div>
+
+  <script>
+    const tasksData = [
+      {
+        id: 1,
+        correct: "1",
+        parts: [
+          "В феврале зори кротко сияли ", ["(1)"], " нежно окрашивая степь ", ["(2)"], " и небо приветливым румянцем ", ["(3)"], " и ", ["(4)"], " предвещая всё ту же постоянную погоду на завтра."
+        ],
+        explanation: "Обособленное обстоятельство, выраженное деепричастным оборотом «нежно окрашивая... и предвещая...». Запятая нужна только перед началом оборота — цифра 1. Внутри оборота однородные деепричастия соединены одиночным союзом «и» (цифра 4), запятая не ставится."
+      },
+      {
+        id: 2,
+        correct: "123",
+        parts: [
+          "Семейство ", ["(1)"], " приехавшее на старенькой «Волге» ", ["(2)"], " располагалось на отдых ", ["(3)"], " натягивая в виде тента ", ["(4)"], " сверкающую белизной простыню."
+        ],
+        explanation: "1 и 2 — обособление причастного оборота «приехавшее на старенькой „Волге“»; 3 — обособление деепричастного оборота «натягивая в виде тента сверкающую белизной простыню». Цифра 4 внутри оборота запятой не требует."
+      },
+      {
+        id: 3,
+        correct: "123",
+        parts: [
+          "Из ручейка ", ["(1)"], " текущего в ущелье ", ["(2)"], " мы черпали воду ", ["(3)"], " казавшуюся нам ", ["(4)"], " кристально чистой."
+        ],
+        explanation: "1 и 2 — обособление причастного оборота «текущего в ущелье»; 3 — обособление причастного оборота «казавшуюся нам кристально чистой». Цифра 4 внутри оборота запятой не требует."
+      },
+      {
+        id: 4,
+        correct: "1345",
+        parts: [
+          "Шиповник стоял ", ["(1)"], " повернувшись большими цветами ", ["(2)"], " к солнцу ", ["(3)"], " нарядный ", ["(4)"], " совершенно праздничный ", ["(5)"], " покрытый множеством острых бутонов."
+        ],
+        explanation: "1 — обособление деепричастного оборота «повернувшись большими цветами к солнцу» (внутри — без запятой, цифра 2 не нужна); 3, 4, 5 — обособление однородных согласованных определений «нарядный, совершенно праздничный, покрытый множеством острых бутонов», стоящих после определяемого слова."
+      },
+      {
+        id: 5,
+        correct: "12",
+        parts: [
+          "Сад ", ["(1)"], " всё больше редея и переходя в настоящий луг ", ["(2)"], " спускался к ", ["(3)"], " поросшей зелёным камышом и ивняком ", ["(4)"], " реке."
+        ],
+        explanation: "1 и 2 — обособление деепричастного оборота «всё больше редея и переходя в настоящий луг». Цифры 3 и 4 не нужны: причастный оборот «поросшей зелёным камышом и ивняком» стоит перед определяемым словом «реке» и не обособляется."
+      },
+      {
+        id: 6,
+        correct: "4",
+        parts: [
+          "Перелистывая ", ["(1)"], " книги из библиотеки А.С. Пушкина ", ["(2)"], " и ", ["(3)"], " изучая пометки на полях ", ["(4)"], " невольно приходишь к выводу, что поэт был ещё и гениальным читателем."
+        ],
+        explanation: "Два однородных деепричастных оборота, соединённых одиночным союзом «и», — обособляются вместе, одной запятой после второго оборота (цифра 4). Цифры 1, 2, 3 не нужны."
+      },
+      {
+        id: 7,
+        correct: "134",
+        parts: [
+          "Солнце ", ["(1)"], " тысячекратно отражённое ", ["(2)"], " рябью моря ", ["(3)"], " гармонично сливаясь в единое целое ", ["(4)"], " было наполнено невероятным блеском."
+        ],
+        explanation: "1 и 3 — обособление причастного оборота «тысячекратно отражённое рябью моря» (цифра 2 внутри — не нужна); 4 — обособление деепричастного оборота «гармонично сливаясь в единое целое»."
+      },
+      {
+        id: 8,
+        correct: "12",
+        parts: [
+          "Кругом были поля, глушь исконной, срединной России; среди них ", ["(1)"], " зарастая кудрявой муравой ", ["(2)"], " уходила вдаль ", ["(3)"], " изрезанная колеями ", ["(4)"], " дорога."
+        ],
+        explanation: "1 и 2 — обособление деепричастного оборота «зарастая кудрявой муравой». Цифры 3 и 4 не нужны: причастный оборот «изрезанная колеями» стоит перед определяемым словом «дорога» и не обособляется."
+      },
+      {
+        id: 9,
+        correct: "1234",
+        parts: [
+          "Пословица ", ["(1)"], " заключавшая народные наблюдения ", ["(2)"], " согласовывалась с образом жизни и мыслями множества людей и ", ["(3)"], " переходя из века в век ", ["(4)"], " могла существовать тысячелетия."
+        ],
+        explanation: "1 и 2 — обособление причастного оборота «заключавшая народные наблюдения»; 3 и 4 — обособление деепричастного оборота «переходя из века в век». Перед первым «и» (между однородными сказуемыми) запятая не нужна."
+      },
+      {
+        id: 10,
+        correct: "2345",
+        parts: [
+          "Торжествуя ", ["(1)"], " и смеясь ", ["(2)"], " катилось по верхушкам сосен ", ["(3)"], " обрамляющих околицу ", ["(4)"], " солнце ", ["(5)"], " обещая долгий и счастливый летний день."
+        ],
+        explanation: "1 — не нужна: однородные деепричастия «торжествуя и смеясь» соединены одиночным союзом «и». 2 — обособление всего деепричастного оборота; 3 и 4 — обособление причастного оборота «обрамляющих околицу»; 5 — обособление деепричастного оборота «обещая долгий и счастливый летний день»."
+      }
+    ];
+
+    const container = document.getElementById("tasks");
+
+    tasksData.forEach((task) => {
+      const card = document.createElement("section");
+      card.className = "card";
+      card.dataset.task = task.id;
+
+      const sentenceHTML = task.parts.map((part) => {
+        if (Array.isArray(part)) {
+          return `<span class="m">${part[0]}</span>`;
+        }
+        return part;
+      }).join("");
+
+      card.innerHTML = `
+        <div class="task-head">
+          <h2>Предложение ${task.id}</h2>
+          <span class="status"></span>
+        </div>
+        <div class="sentence">${sentenceHTML}</div>
+        <div class="input-row">
+          <label for="ans-${task.id}">Ваш ответ:</label>
+          <input
+            id="ans-${task.id}"
+            class="answer-input"
+            type="text"
+            inputmode="numeric"
+            placeholder="например, 1234"
+            autocomplete="off"
+          >
+        </div>
+        <div class="actions">
+          <button class="btn check">Проверить</button>
+          <button class="btn ghost reset">Сбросить</button>
+        </div>
+        <div class="feedback"></div>
+      `;
+
+      container.appendChild(card);
+
+      const input = card.querySelector(".answer-input");
+
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          checkTask(card, task);
+        }
+      });
+
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/[^0-9]/g, "");
+      });
+
+      card.querySelector(".check").addEventListener("click", () => {
+        checkTask(card, task);
+      });
+
+      card.querySelector(".reset").addEventListener("click", () => {
+        resetTask(card, task);
+      });
+    });
+
+    function normalize(str) {
+      return (str || "").replace(/\s+/g, "").replace(/,/g, "");
+    }
+
+    function sortDigits(str) {
+      return str.split("").sort().join("");
+    }
+
+    function checkTask(card, task) {
+      const input = card.querySelector(".answer-input");
+      const raw = normalize(input.value);
+      const given = sortDigits(raw);
+      const correct = sortDigits(task.correct);
+      const isEmpty = raw.length === 0;
+      const isCorrect = !isEmpty && given === correct;
+
+      input.classList.remove("correct", "wrong");
+
+      const status = card.querySelector(".status");
+      const feedback = card.querySelector(".feedback");
+
+      if (isEmpty) {
+        status.textContent = "";
+        status.className = "status";
+        feedback.innerHTML = `<span style="color:var(--warn)">⚠️ Введите ответ, чтобы проверить.</span>`;
+        updateTotal();
+        return;
+      }
+
+      if (isCorrect) {
+        input.classList.add("correct");
+        status.textContent = "Верно";
+        status.className = "status ok";
+        feedback.innerHTML = `
+          ✅ Верно! Правильный ответ: <b>${task.correct}</b>.
+          <div class="explain">${task.explanation}</div>
+        `;
+      } else {
+        input.classList.add("wrong");
+        status.textContent = "Ошибка";
+        status.className = "status bad";
+        feedback.innerHTML = `
+          ❌ Пока неверно. Вы ввели: <b>${raw || "—"}</b>.
+          Правильный ответ: <b>${task.correct}</b>.
+          <div class="explain">${task.explanation}</div>
+        `;
+      }
+
+      updateTotal();
+    }
+
+    function resetTask(card) {
+      const input = card.querySelector(".answer-input");
+      input.value = "";
+      input.classList.remove("correct", "wrong");
+
+      const status = card.querySelector(".status");
+      status.textContent = "";
+      status.className = "status";
+
+      card.querySelector(".feedback").textContent = "";
+
+      updateTotal();
+    }
+
+    function updateTotal() {
+      const cards = [...document.querySelectorAll(".card")];
+      let done = 0;
+      let ok = 0;
+
+      cards.forEach((card) => {
+        const status = card.querySelector(".status");
+        if (status.textContent) {
+          done++;
+          if (status.classList.contains("ok")) {
+            ok++;
+          }
+        }
+      });
+
+      document.getElementById("total").textContent =
+        `Выполнено: ${done} из ${cards.length} • Верно: ${ok}`;
+    }
+
+    document.getElementById("checkAll").addEventListener("click", () => {
+      tasksData.forEach((task) => {
+        const card = document.querySelector(`.card[data-task="${task.id}"]`);
+        const input = card.querySelector(".answer-input");
+        if (normalize(input.value).length > 0) {
+          checkTask(card, task);
+        }
+      });
+    });
+
+    document.getElementById("resetAll").addEventListener("click", () => {
+      tasksData.forEach((task) => {
+        const card = document.querySelector(`.card[data-task="${task.id}"]`);
+        resetTask(card, task);
+      });
+    });
+  </script>
+</body>
+</html>
